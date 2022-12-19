@@ -113,33 +113,47 @@ const App: () => Node = () => {
   };
 
   const saveEdit = id => {
-    console.log('id', id);
-    let toBeEdited = toDoList.filter(item => item.id === id);
-    let nonEditingItem = toDoList.filter(item => item.id !== id);
-    console.log('editing', toBeEdited, nonEditingItem);
-    toBeEdited[0].value = editedText;
     let index = toDoList.findIndex(item => item.id === id);
-    let finalArr = [
+    let nonEditingItem = toDoList.filter(item => item.id !== id);
+    setToDoList(prevstate => [
+      (prevstate[index] = {
+        ...prevstate[index],
+        value: editedText,
+      }),
       ...nonEditingItem,
-      ...(toDoList[index] = toBeEdited.flat()),
-    ];
+    ]);
+    // toDoList[index].value = editedText
+    // console.log('id', id);
+    // let toBeEdited = toDoList.filter(item => item.id === id);
+    // let nonEditingItem = toDoList.filter(item => item.id !== id);
+    // console.log('editing', toBeEdited, nonEditingItem);
+    // toBeEdited[0].value = editedText;
+    // let index = toDoList.findIndex(item => item.id === id);
+    // let finalArr = [
+    //   ...nonEditingItem,
+    //   ...(toDoList[index] = toBeEdited.flat()),
+    // ];
     setEditId(0);
-    setToDoList(finalArr);
-    const writeInAsync = AsyncStorage.setItem('list', JSON.stringify(finalArr));
+    // setToDoList(finalArr);
+    // const writeInAsync = AsyncStorage.setItem('list', JSON.stringify(finalArr));
   };
 
   const listCompleted = (id, value) => {
-    console.log('id', id);
-    let toBeEdited = toDoList.filter(item => item.id === id);
-    let nonEditingItem = toDoList.filter(item => item.id !== id);
-    console.log('editing', toBeEdited, nonEditingItem);
-    toBeEdited[0].completed = value;
     let index = toDoList.findIndex(item => item.id === id);
-    let finalArr = [
-      ...nonEditingItem,
-      ...(toDoList[index] = toBeEdited.flat()),
-    ];
-    setToDoList(finalArr);
+    let nonEditingItem = toDoList.filter(item => item.id !== id);
+    setToDoList(prevstate => [
+      (prevstate[index] = {
+        ...prevstate[index],
+        completed: true,
+      }),
+      ...toDoList,
+    ]);
+    let newArr = toDoList;
+
+    newArr[index] = {
+      ...newArr[index],
+      completed: true,
+    };
     const writeInAsync = AsyncStorage.setItem('list', JSON.stringify(finalArr));
   };
 
